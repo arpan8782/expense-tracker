@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load staticfiles %}
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/jquery-ui/jquery-ui.js" %}"></script>
+
+    {% if request.user_agent.is_mobile %}
+      <link rel="stylesheet" href="{% static "css/main-mobile.css" %}">
+    {% else %}
+      <link rel="stylesheet" href="{% static "css/main.css" %}">
+    {% endif %}
+    <link rel="stylesheet" href="{% static "js/jquery-ui/jquery-ui.css" %}">
+
+    <title>Budgie - {% block title %}Expense Tracker{% endblock %}</title>
+    {% block extrahead %} {% endblock %}
+  </head>
+
+  <body>
+    <div id="sidebar">
+      {% block sidebar %}
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'entry_create' %}">New Entry</a></li>
+        <li><a href="{% url 'entry_list' %}">Entries</a></li>
+        <li><a href="{% url 'category_list' %}">Categories</a></li>
+        <li><a href="{% url 'stats_home' %}">Statistics</a></li>
+        <li><a href="{% url 'user_logout' %}">Logout</a></li>
+      </ul>
+      {% endblock %}
+    </div>
+
+    <div id="heading">
+      <h2>
+        {% block heading %}
+          Budgie
+        {% endblock %}
+      </h2>
+      <hr>
+    </div>
+
+    <div id="content">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+    </div>
+  </body>
+  <script>
+    // Set active page css
+    $('#sidebar ul li a').map(function(num, element){
+      if($(element).attr('href') == "{{ request.path }}"){
+        $(element).parent().addClass('active-page');
+      }
+    })
+  </script>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- local resources -->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <title>Budgie - login</title>
+</head>
+
+<body>
+    <div id="login-box">
+        <h2>Budgie Login</h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            <table>
+                {% if success %}
+                    <th>
+                        The form has successfully been saved
+                    </th>
+                {% endif %}
+                {% if has_error %}
+                    <th>
+                        Please address the errors below.
+                    </th>
+                {% endif %}
+
+                {% for field in form %}
+                    <tr>
+                        <td class="label">{{ field.label_tag }}</td>
+                        <td class="field">{{ field }}</td>
+                    </tr>
+                    {% if field.errors %}
+                        <tr>
+                            <td class="error" colspan="100">{{ field.errors }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
